@@ -5,6 +5,7 @@ namespace Infrastructure\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Domain\Model\Category;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,7 @@ class CategoryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, CategoryRepository::class);
+        parent::__construct($registry, Category::class);
     }
 
     public function save(Category $category): void
@@ -23,6 +24,19 @@ class CategoryRepository extends ServiceEntityRepository
         try {
             $em->persist($category);
             $em->flush();
+        } catch (ORMException $exception) {
+            throw new RepositoryException($exception->getMessage(), Response::HTTP_FORBIDDEN);
+        }
+    }
+
+    /**
+     * @param Category $category
+     * @throws RepositoryException
+     */
+    public function flush()
+    {
+        try {
+            $this->getEntityManager()->flush();
         } catch (ORMException $exception) {
             throw new RepositoryException($exception->getMessage(), Response::HTTP_FORBIDDEN);
         }

@@ -41,7 +41,7 @@ class Task
     /**
      * @ORM\ManyToOne(targetEntity="Card", inversedBy="taskList")
      */
-    private $card;
+    private Card $card;
 
     public function __construct(string $id, string $title, int $position, Card $card)
     {

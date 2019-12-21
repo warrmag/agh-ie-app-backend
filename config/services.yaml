@@ -28,5 +28,9 @@ services:
         resource: '../src/UI/Controller'
         tags: ['controller.service_arguments']
 
+    # Services mapping
+    Domain\Service\TastServiceInterface: '@Application\Service\TaskService'
+    Domain\Service\CardServiceInterfac: '@Application\Service\CardService'
+    Domain\Service\CategoryServiceInterface: '@Application\Service\CategoryService'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Application\Service;
 
+use Domain\Service\TaskServiceInterface;
 use Domain\DTO\TaskDTO;
 use Domain\Model\Card;
 use Infrastructure\Repository\RepositoryException;
@@ -10,7 +11,7 @@ use Infrastructure\Repository\TaskRepository;
 use Domain\Model\Task;
 use Ramsey\Uuid\Uuid;
 
-class TaskService
+class TaskService implements TaskServiceInterface
 {
     private TaskRepository $repository;
 

@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace UI\Controller;
 
-use Application\Service\CardService;
 use Domain\DTO\CardDTO;
 use Domain\Model\Card;
+use Domain\Model\Category;
+use Domain\Service\CardServiceInterface;
 use Infrastructure\Repository\CardRepository;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,11 +19,11 @@ class CardController extends AbstractController
 {
     private SerializerInterface $serializer;
 
-    private CardService $cardService;
+    private CardServiceInterface $cardService;
 
     private CardRepository $cardRepository;
 
-    public function __construct(SerializerInterface $serializer, CardService $cardService, CardRepository $cardRepository)
+    public function __construct(SerializerInterface $serializer, CardServiceInterface $cardService, CardRepository $cardRepository)
     {
         $this->serializer = $serializer;
         $this->cardService = $cardService;
@@ -30,15 +31,16 @@ class CardController extends AbstractController
     }
 
     /**
-     * @Route("/cards", name="create-card", methods={"POST"})
+     * @Route("/categories/{category_id}/cards", name="create-card", methods={"POST"})
+     * @param Category $category
      * @param Request $request
      * @return Response
      */
-    public function create(Request $request): Response
+    public function create(Category $category, Request $request): Response
     {
         $cardDTO = $this->serializer->deserialize($request->getContent(), CardDTO::class, 'json');
 
-        $card = $this->cardService->create($cardDTO);
+        $card = $this->cardService->create($cardDTO, $category);
 
         return new Response($this->serializer->serialize($card, 'json'), Response::HTTP_CREATED);
     }

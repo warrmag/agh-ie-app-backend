@@ -27,21 +27,29 @@ class Card
     private string $title;
 
     /**
-     * @ORM\OneToMany(targetEntity="Task", mappedBy="card")
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="card", cascade={"persist", "remove"})
      * @Serializer\SerializedName("elements")
      */
     private Collection $taskList;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="cardList")
+     */
+    private Category $category;
+
+    /**
      * Card constructor.
      * @param string $id
+     * @param string $title
+     * @param Category $category
      * @param Collection $taskList
      */
-    public function __construct(string $id, string $title, Collection $taskList = null)
+    public function __construct(string $id, string $title, Category $category, Collection $taskList = null)
     {
         $this->id = $id;
         $this->title = $title;
         $this->taskList = $taskList ?? new ArrayCollection();
+        $this->category = $category;
     }
 
     public function changeTitle(string $title): void
@@ -60,5 +68,11 @@ class Card
         }
 
         $this->taskList->add($task);
+    }
+
+    public function addToCategory(Category $category): void
+    {
+        $this->category = $category;
+        $category->addCard($this);
     }
 }

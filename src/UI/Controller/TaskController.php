@@ -6,8 +6,8 @@ namespace UI\Controller;
 use Domain\DTO\TaskDTO;
 use Domain\Model\Card;
 use Domain\Model\Task;
+use Domain\Service\TaskServiceInterface;
 use Infrastructure\Repository\RepositoryException;
-use Application\Service\TaskService;
 use Infrastructure\Repository\TaskRepository;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,11 +20,11 @@ class TaskController extends AbstractController
 {
     private SerializerInterface $serializer;
 
-    private TaskService $taskService;
+    private TaskServiceInterface $taskService;
 
     private TaskRepository $taskRepository;
 
-    public function __construct(SerializerInterface $serializer, TaskService $taskService, TaskRepository $taskRepository)
+    public function __construct(SerializerInterface $serializer, TaskServiceInterface $taskService, TaskRepository $taskRepository)
     {
         $this->serializer = $serializer;
         $this->taskService = $taskService;

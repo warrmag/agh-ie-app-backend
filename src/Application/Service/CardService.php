@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Application\Service;
 
+use Domain\Model\Category;
+use Domain\Service\CardServiceInterface;
 use Domain\DTO\CardDTO;
 use Infrastructure\Repository\CardRepository;
 use Domain\Model\Card;
 use Ramsey\Uuid\Uuid;
 
-class CardService
+class CardService implements CardServiceInterface
 {
     private CardRepository $repository;
 
@@ -22,11 +24,12 @@ class CardService
      * @return Card
      * @throws \Infrastructure\Repository\RepositoryException
      */
-    public function create(CardDTO $cardDTO): Card
+    public function create(CardDTO $cardDTO, Category $category): Card
     {
         $card = new Card(
             Uuid::uuid4()->toString(),
-            $cardDTO->title
+            $cardDTO->title,
+            $category
         );
         $this->repository->save($card);
 

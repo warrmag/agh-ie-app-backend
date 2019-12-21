@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Infrastructure\Repository\CategoryRepository")
  */
 class Category
 {
@@ -26,7 +26,7 @@ class Category
     private string $title;
 
     /**
-     * @ORM\OneToMany(targetEntity="Task", mappedBy="card")
+     * @ORM\OneToMany(targetEntity="Card", mappedBy="category", cascade={"persist", "remove"})
      */
     private Collection $cardList;
 

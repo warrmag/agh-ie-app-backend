@@ -7,6 +7,7 @@ use Domain\DTO\CategoryDTO;
 use Domain\Model\Card;
 use Domain\Model\Category;
 use Domain\Service\CategoryServiceInterface;
+use Infrastructure\Repository\CategoryRepository;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,11 +19,30 @@ class CategoryController extends AbstractController
     private SerializerInterface $serializer;
 
     private CategoryServiceInterface $categoryService;
+    /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
 
-    public function __construct(SerializerInterface $serializer, CategoryServiceInterface $categoryService)
-    {
+    public function __construct(
+        SerializerInterface $serializer,
+        CategoryServiceInterface $categoryService,
+        CategoryRepository $categoryRepository
+    ) {
         $this->serializer = $serializer;
         $this->categoryService = $categoryService;
+        $this->categoryRepository = $categoryRepository;
+    }
+
+    /**
+     * @Route("/categories", name="get-category", methods={"GET"})
+     * @return Response
+     */
+    public function getAll(): Response
+    {
+        $categoryList = $this->categoryRepository->findAll();
+
+        return new Response($this->serializer->serialize($categoryList, 'json'), Response::HTTP_OK);
     }
 
     /**

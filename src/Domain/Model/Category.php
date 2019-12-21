@@ -6,6 +6,7 @@ namespace Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="Infrastructure\Repository\CategoryRepository")
@@ -13,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Category
 {
     /**
+     * @Serializer\Groups({"list"})
      * @ORM\Id()
      * @ORM\Column(type="uuid", unique=true, length=36)
      * @ORM\GeneratedValue(strategy="NONE")
@@ -21,6 +23,7 @@ class Category
     private string $id;
 
     /**
+     * @Serializer\Groups({"list"})
      * @ORM\Column(type="string", nullable=false)
      */
     private string $title;

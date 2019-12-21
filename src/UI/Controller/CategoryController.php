@@ -8,6 +8,7 @@ use Domain\Model\Card;
 use Domain\Model\Category;
 use Domain\Service\CategoryServiceInterface;
 use Infrastructure\Repository\CategoryRepository;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,14 +36,29 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/categories", name="get-category", methods={"GET"})
+     * @Route("/categories", name="get-all-categories", methods={"GET"})
      * @return Response
      */
     public function getAll(): Response
     {
         $categoryList = $this->categoryRepository->findAll();
 
-        return new Response($this->serializer->serialize($categoryList, 'json'), Response::HTTP_OK);
+        return new Response(
+            $this->serializer->serialize(
+                $categoryList,
+                'json',
+                SerializationContext::create()->setGroups(['list'])
+                ),
+            Response::HTTP_OK
+        );
+    }
+    /**
+     * @Route("/categories/{id}", name="get-category", methods={"GET"})
+     * @return Response
+     */
+    public function getOne(Category $category): Response
+    {
+        return new Response($this->serializer->serialize($category, 'json',), Response::HTTP_OK);
     }
 
     /**

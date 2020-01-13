@@ -31,10 +31,10 @@ class CardController extends AbstractController
     }
 
     /**
-     * @Route("/categories/{category_id}/cards", name="create-card", methods={"POST"})
-     * @param Category $category
+      * @param Category $category
      * @param Request $request
      * @return Response
+     * @Route("/categories/{id}/cards", name="create-card", methods={"POST"})
      */
     public function create(Category $category, Request $request): Response
     {
